@@ -1,0 +1,57 @@
+Short description (also in manifest.json)
+
+Easily find, organize, and open your bookmarks.
+
+Detailed description
+
+Organise and access your bookmarks in the best way possible.
+
+Bookmarks Home lets you search, tidy, and open your bookmarks library beside the page you're visiting or on every new tab.
+
+Here's what you can do:
+
+• Search your library - Find a saved page by title or address 
+• Pin favorites - Keep the links you use every day within reach 
+• Pin folders as sections - See folders at a glance by managing them as sections
+• Edit in place - Rename, move, add, and remove pages and folders 
+• Save current page - Easily add the tab you're viewing to the right place in your library
+• See folder as graph - Turn a long list into a graph to see the whole folder at a glance
+• Make it your new tab - Make this extension your new tab page, or keep it beside you in the side panel
+
+Perfect for anyone who wants to create and maintain a structure for their bookmarks.
+
+Single purpose
+
+Provide one place to browse, search, and edit Chrome bookmarks, in the side panel or, if the user turns it on, as the new tab page.
+
+Category
+
+Workflow & Planning
+
+Permission justifications
+
+bookmarks — Read and change the user's Chrome bookmarks so they can browse, search, create, rename, move, and delete them.
+
+favicon — Show the site icon next to each bookmark. Chrome loads the icon; the extension does not send the address anywhere.
+
+sidePanel — Open the bookmark view in the side panel when the user clicks the toolbar icon.
+
+storage — Remember the toolbar icon color and which folders were expanded during this browser session.
+
+tabs — Read the title and address of the active tab only when the user saves the current page, and open a bookmark in a tab or window.
+
+Remote code
+
+No, I am not using remote code.
+
+Data use
+
+Disclose: Website content (bookmark titles and addresses, and the title and address of the page the user chooses to save).
+
+Do not disclose: personally identifiable information, health, financial, authentication, personal communications, location, web history, or user activity. The extension does not collect those.
+
+Certify all three limited-use statements: data is not sold or transferred, not used for unrelated purposes, and not used for credit or lending.
+
+Privacy policy
+
+Host PRIVACY.md at a public HTTPS URL and paste that URL into the developer dashboard. The dashboard will not accept the file by itself.

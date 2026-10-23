@@ -1,0 +1,365 @@
+.header-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header-bar h1 {
+  flex: 1 1 auto;
+}
+
+.header-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-actions:not(:has(button:not([hidden]))),
+html[data-expand-button="off"] .header-actions:not(:has(.graph-toggle:not([hidden]))) {
+  display: none;
+}
+
+.graph-toggle,
+.branch-toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.graph-toggle[hidden],
+.branch-toggle[hidden],
+html[data-expand-button="off"] .branch-toggle {
+  display: none;
+}
+
+.graph-toggle:is(:hover, .is-hot),
+.graph-toggle:focus-visible,
+.branch-toggle:is(:hover, .is-hot),
+.branch-toggle:focus-visible {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.graph-toggle[aria-pressed="true"],
+.graph-toggle[aria-pressed="true"]:hover {
+  color: var(--accent);
+  background: transparent;
+}
+
+.graph-toggle[aria-pressed="true"]:is(:hover, .is-hot) {
+  background: var(--hover);
+}
+
+.graph-toggle[aria-pressed="true"]:focus-visible {
+  color: var(--accent);
+}
+
+.graph-toggle:focus-visible,
+.branch-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.graph-toggle svg,
+.branch-toggle svg {
+  display: block;
+}
+
+.branch-toggle svg {
+  width: 21px;
+  height: 18px;
+}
+
+.graph-host,
+.tree-host,
+.panel {
+  overflow-anchor: none;
+}
+
+.graph-host {
+  min-width: 0;
+  contain: inline-size;
+}
+
+.graph-host[hidden] {
+  display: none;
+}
+
+.graph-message {
+  margin: 0;
+  padding: 4px 8px;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.graph-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  padding-bottom: 12px;
+  scrollbar-color: var(--line) transparent;
+}
+
+.graph-track {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.graph-gutter {
+  flex: none;
+}
+
+.graph-canvas {
+  position: relative;
+  flex: none;
+  padding: 10px 0 16px;
+}
+
+.graph-lines {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.graph-lines path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+
+.graph-joint {
+  display: flex;
+  align-items: center;
+}
+
+.graph-stem {
+  flex: none;
+  width: 18px;
+  height: 0;
+}
+
+.graph-children.is-section {
+  margin-left: 0;
+}
+
+.graph-children {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.graph-branch {
+  display: flex;
+  align-items: center;
+  padding: 7px 0;
+}
+
+.graph-node {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  max-width: 16rem;
+  scroll-margin-top: calc(16px + var(--search-dock-height, 36px) + 12px);
+  scroll-margin-right: 28px;
+  scroll-margin-bottom: 24px;
+  scroll-margin-left: 28px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.graph-folder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ink) 14%, var(--bg));
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.graph-folder.is-first {
+  min-width: 4.75rem;
+  min-height: 52px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.graph-folder.is-uniform {
+  width: 11.25rem;
+  height: 36px;
+  padding: 0 22px;
+  font-size: 14px;
+}
+
+.graph-folder[aria-expanded="false"] {
+  background: color-mix(in srgb, var(--ink) 8%, var(--bg));
+  color: var(--faint);
+}
+
+.graph-folder:is(:hover, .is-hot) {
+  background: color-mix(in srgb, var(--ink) 20%, var(--bg));
+}
+
+.graph-folder[aria-expanded="false"]:is(:hover, .is-hot) {
+  background: color-mix(in srgb, var(--ink) 12%, var(--bg));
+}
+
+.graph-folder:active {
+  background: color-mix(in srgb, var(--ink) 26%, var(--bg));
+}
+
+.graph-leaf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px 3px 12px;
+  border-radius: var(--radius);
+  color: inherit;
+  font-weight: 400;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.graph-leaf:is(:hover, .is-hot) {
+  background: var(--hover);
+}
+
+.graph-leaf:active {
+  background: var(--press);
+}
+
+.graph-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.graph-favicon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  color: var(--faint);
+}
+
+.graph-favicon svg,
+.graph-favicon-img {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.graph-favicon-img {
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+html[data-favicons="off"] .graph-favicon {
+  display: none;
+}
+
+.graph-folder .branch-folder {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 7px;
+  display: none;
+  translate: 0 -50%;
+}
+
+.graph-folder .branch-folder svg {
+  rotate: -90deg;
+}
+
+.graph-folder:is(:hover, .is-hot) > .branch-folder,
+.graph-folder:focus-within > .branch-folder,
+.graph-folder > .branch-folder.is-hot {
+  display: grid;
+}
+
+html[data-expand-button="off"] .graph-folder > .branch-folder {
+  display: none;
+}
+
+.graph-node:focus {
+  outline: none;
+}
+
+.graph-node:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+html[data-pointer="on"] .graph-folder:hover:not(.is-hot) {
+  background: color-mix(in srgb, var(--ink) 14%, var(--bg));
+  color: var(--ink);
+}
+
+html[data-pointer="on"] .graph-folder[aria-expanded="false"]:hover:not(.is-hot) {
+  background: color-mix(in srgb, var(--ink) 8%, var(--bg));
+  color: var(--faint);
+}
+
+html[data-pointer="on"] .graph-folder:hover:not(.is-hot) > .branch-folder {
+  display: none;
+}
+
+html[data-pointer="on"] .graph-leaf:hover:not(.is-hot),
+html[data-pointer="on"] .graph-toggle:hover:not(.is-hot),
+html[data-pointer="on"] .branch-toggle:hover:not(.is-hot) {
+  background: transparent;
+  color: inherit;
+}
+
+@media (forced-colors: active) {
+  .graph-toggle,
+  .branch-toggle,
+  .graph-folder {
+    border: 1px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .graph-toggle[aria-pressed="true"] {
+    outline: 2px solid Highlight;
+  }
+
+  .graph-leaf {
+    color: LinkText;
+  }
+
+  .graph-lines path {
+    stroke: CanvasText;
+  }
+
+  .graph-node:focus-visible {
+    outline-color: Highlight;
+  }
+}

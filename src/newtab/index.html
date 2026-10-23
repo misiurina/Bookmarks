@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookmarks</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script src="home.js"></script>
+  <script src="../action-icon.js"></script>
+  <script src="../settings/boot.js"></script>
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../styles/tree.css">
+  <link rel="stylesheet" href="../styles/graph.css">
+  <link rel="stylesheet" href="../styles/drawer.css">
+  <link rel="stylesheet" href="newtab.css">
+  <script type="module" src="../app/main.js"></script>
+</head>
+
+<body>
+  <div class="search-dock" id="search-dock">
+    <form class="bookmark-search" id="bookmark-search-form" role="search">
+      <label class="visually-hidden" for="bookmark-search">Search bookmarks</label>
+      <svg class="bookmark-search-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <path d="M10.2 10.2 13.2 13.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+      </svg>
+      <input class="bookmark-search-input" id="bookmark-search" type="search" placeholder="Search bookmarks"
+        autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"
+        aria-controls="favourites sections">
+      <button type="submit" class="bookmark-search-save" id="bookmark-search-save" hidden aria-label="Save filter">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+          <path d="M8 3.2v9.6M3.2 8h9.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button type="button" class="bookmark-search-clear" id="bookmark-search-clear" hidden aria-label="Clear search">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+          <path d="M4.2 4.2 11.8 11.8M11.8 4.2 4.2 11.8" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
+      </button>
+    </form>
+    <ul class="filter-tags" id="filter-tags" aria-label="Saved filters" hidden></ul>
+    <button type="button" class="edit-banner" id="edit-banner" hidden aria-label="Exit edit mode">
+      <span class="edit-banner-title">
+        <svg class="edit-banner-mark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path d="M9.3 2.7a1.15 1.15 0 0 1 1.6 0l2.4 2.4a1.15 1.15 0 0 1 0 1.6L6.1 13.9 2.2 14.8l.9-3.9z" fill="none"
+            stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+          <path d="M8.5 3.7 12.3 7.5" fill="none" stroke="currentColor" stroke-width="1.3" />
+        </svg>
+        Editing
+      </span>
+      <span class="edit-banner-exit">Exit edit mode</span>
+    </button>
+  </div>
+  <div class="window-tools window-tools-start">
+    <button type="button" class="sections-toggle" id="sections-toggle" aria-pressed="true" aria-controls="section-rail"
+      title="Hide sections">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+        <rect x="1.75" y="2.25" width="12.5" height="11.5" rx="1.6" fill="none" stroke="currentColor"
+          stroke-width="1.4" />
+        <path d="M6.2 2.25v11.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <rect x="2.55" y="3.15" width="2.85" height="9.7" rx="0.4" fill="currentColor" />
+      </svg>
+      <span class="visually-hidden">Hide sections</span>
+    </button>
+    <button type="button" class="panel-expand" id="panel-expand" title="Open in a tab">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M9.4 3.1h3.5v3.5M12.9 3.1 8.7 7.3M6.6 12.9H3.1V9.4M3.1 12.9l4.2-4.2" fill="none" stroke="currentColor"
+          stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span class="visually-hidden">Open in a tab</span>
+    </button>
+    <button type="button" class="bookmark-page" id="bookmark-page" title="Bookmark current page">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M8 3.2v9.6M3.2 8h9.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      <span class="visually-hidden">Bookmark current page</span>
+    </button>
+  </div>
+  <div class="window-tools">
+    <button type="button" class="edit-toggle" id="edit-toggle" aria-pressed="false" title="Edit bookmarks">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M9.3 2.7a1.15 1.15 0 0 1 1.6 0l2.4 2.4a1.15 1.15 0 0 1 0 1.6L6.1 13.9 2.2 14.8l.9-3.9z" fill="none"
+          stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+        <path d="M8.5 3.7 12.3 7.5" fill="none" stroke="currentColor" stroke-width="1.3" />
+      </svg>
+      <span class="visually-hidden">Edit bookmarks</span>
+    </button>
+    <button type="button" class="settings-toggle" id="settings-toggle" aria-expanded="false"
+      aria-controls="settings-drawer" title="Settings">
+      <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M2.5 5h11M2.5 11h11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        <circle cx="6" cy="5" r="1.7" fill="var(--bg)" stroke="currentColor" stroke-width="1.4" />
+        <circle cx="10.5" cy="11" r="1.7" fill="var(--bg)" stroke="currentColor" stroke-width="1.4" />
+      </svg>
+      <span class="visually-hidden">Settings</span>
+    </button>
+  </div>
+  <aside class="settings-drawer" id="settings-drawer" role="dialog" aria-labelledby="settings-title" aria-hidden="true"
+    hidden>
+    <div class="settings-head">
+      <h2 id="settings-title">Settings</h2>
+      <button type="button" class="settings-close" id="settings-close" aria-label="Close settings">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path d="M4.2 4.2 11.8 11.8M11.8 4.2 4.2 11.8" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <form class="settings-body" id="settings-form">
+      <section class="settings-section">
+        <h3>Home page</h3>
+        <button type="button" class="home-toggle" id="home-toggle" aria-pressed="false">Use as home page</button>
+      </section>
+      <section class="settings-section">
+        <h3>Look</h3>
+        <label class="switch-row">
+          <span>Show favicons</span>
+          <span class="switch">
+            <input type="checkbox" name="showFavicons">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="switch-row">
+          <span>Indent bookmarks</span>
+          <span class="switch">
+            <input type="checkbox" name="indentFavicons">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="switch-row">
+          <span>Show addresses</span>
+          <span class="switch">
+            <input type="checkbox" name="showAddresses">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="switch-row">
+          <span>Show folder counts</span>
+          <span class="switch">
+            <input type="checkbox" name="showCounts">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="switch-row">
+          <span>Color open folders</span>
+          <span class="switch">
+            <input type="checkbox" name="colorOpenFolders">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <div class="choice-field">
+          <span id="guides-label">Indent guides</span>
+          <div class="segmented" role="radiogroup" aria-labelledby="guides-label">
+            <label>None<input type="radio" name="guides" value="none"></label>
+            <label>Bar<input type="radio" name="guides" value="bar"></label>
+            <label>Elbow<input type="radio" name="guides" value="elbow"></label>
+          </div>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h3>Features</h3>
+        <div class="settings-group">
+          <label class="switch-row">
+            <span>Hide folders</span>
+            <span class="switch">
+              <input type="checkbox" name="showHideButton">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <div id="hidden-section" hidden>
+            <ul class="hidden-list" id="hidden-list"></ul>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label class="switch-row">
+            <span>Expand and collapse all</span>
+            <span class="switch">
+              <input type="checkbox" name="showExpandButton">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <div class="settings-sub" id="expand-options" hidden>
+            <label class="switch-row">
+              <span>Double click to expand all</span>
+              <span class="switch">
+                <input type="checkbox" name="doubleClickBranch">
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label class="switch-row">
+            <span>Sections</span>
+            <span class="switch">
+              <input type="checkbox" name="sectionsEnabled">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <div class="settings-sub" id="sections-options" hidden>
+            <label class="switch-row">
+              <span>Reveal sections when close to the edge</span>
+              <span class="switch">
+                <input type="checkbox" name="revealSections">
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label class="switch-row">
+            <span>Graph view</span>
+            <span class="switch">
+              <input type="checkbox" name="showGraph">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <div class="settings-sub" id="graph-options" hidden>
+            <label class="switch-row">
+              <span>Recenter graph as folders open</span>
+              <span class="switch">
+                <input type="checkbox" name="recenterGraph">
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <label class="switch-row">
+          <span>Favourites</span>
+          <span class="switch">
+            <input type="checkbox" name="showFavourites">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <p class="settings-note">Pin bookmarks under search bar.</p>
+        <p class="settings-kicker">Edit mode</p>
+        <label class="switch-row">
+          <span>Double click to rename</span>
+          <span class="switch">
+            <input type="checkbox" name="doubleClickRename">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="switch-row">
+          <span>Show quick add buttons</span>
+          <span class="switch">
+            <input type="checkbox" name="showAddRow">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <p class="settings-kicker">Sidebar mode</p>
+        <div class="settings-group">
+          <label class="switch-row">
+            <span>Bookmark current page</span>
+            <span class="switch">
+              <input type="checkbox" name="showBookmarkPage">
+              <span class="switch-track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <div class="settings-sub" id="bookmark-page-options" hidden>
+            <div class="depth-field">
+              <label for="bookmark-folder">Default folder</label>
+              <select class="remember-select" id="bookmark-folder" name="bookmarkFolderId"></select>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h3>Open folders</h3>
+        <div class="settings-group">
+          <div class="depth-field">
+            <label for="remember">Remember setup</label>
+            <select class="remember-select" id="remember" name="remember">
+              <option value="off">Don't remember</option>
+              <option value="15">15 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="240">4 hours</option>
+              <option value="1440">1 day</option>
+              <option value="custom">Custom time</option>
+              <option value="session" selected>Until the browser closes</option>
+              <option value="forever">Indefinitely</option>
+            </select>
+          </div>
+          <div class="settings-sub" id="remember-custom" hidden>
+            <div class="depth-field">
+              <label for="remember-minutes">Duration</label>
+              <span class="duration">
+                <input class="duration-input" id="remember-minutes" name="rememberMinutes" type="number" min="1"
+                  max="43200" step="1" inputmode="numeric" value="60">
+                <span>minutes</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h3>Theme</h3>
+        <div class="segmented" role="radiogroup" aria-label="Appearance">
+          <label>System<input type="radio" name="appearance" value="system"></label>
+          <label>Light<input type="radio" name="appearance" value="light"></label>
+          <label>Dark<input type="radio" name="appearance" value="dark"></label>
+        </div>
+        <div class="segmented theme-tabs" role="tablist" aria-label="Theme set">
+          <label>Chrome<input type="radio" name="themeTab" value="chrome"></label>
+          <label>Classical<input type="radio" name="themeTab" value="classical"></label>
+          <label>Own<input type="radio" name="themeTab" value="own"></label>
+        </div>
+        <div class="schemes" id="scheme-list" role="radiogroup" aria-label="Color scheme"></div>
+        <div id="own-theme">
+          <p class="settings-kicker">Light</p>
+          <div class="color-field">
+            <label for="color-light-bg">Background</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-light-bg" name="lightBg" type="color" value="#efeae2">
+              <input class="hex-input" name="lightBgHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Light background hex" value="#efeae2">
+            </span>
+          </div>
+          <div class="color-field">
+            <label for="color-light-ink">Text</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-light-ink" name="lightInk" type="color" value="#221e1a">
+              <input class="hex-input" name="lightInkHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Light text hex" value="#221e1a">
+            </span>
+          </div>
+          <div class="color-field">
+            <label for="color-light-accent">Accent</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-light-accent" name="lightAccent" type="color" value="#8d4b32">
+              <input class="hex-input" name="lightAccentHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Light accent hex" value="#8d4b32">
+            </span>
+          </div>
+          <p class="settings-kicker">Dark</p>
+          <div class="color-field">
+            <label for="color-dark-bg">Background</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-dark-bg" name="darkBg" type="color" value="#121110">
+              <input class="hex-input" name="darkBgHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Dark background hex" value="#121110">
+            </span>
+          </div>
+          <div class="color-field">
+            <label for="color-dark-ink">Text</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-dark-ink" name="darkInk" type="color" value="#f3efe8">
+              <input class="hex-input" name="darkInkHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Dark text hex" value="#f3efe8">
+            </span>
+          </div>
+          <div class="color-field">
+            <label for="color-dark-accent">Accent</label>
+            <span class="color-controls">
+              <input class="color-input" id="color-dark-accent" name="darkAccent" type="color" value="#e0a88a">
+              <input class="hex-input" name="darkAccentHex" type="text" spellcheck="false" autocapitalize="off" aria-label="Dark accent hex" value="#e0a88a">
+            </span>
+          </div>
+        </div>
+        <label class="switch-row">
+          <span>Show background glow</span>
+          <span class="switch">
+            <input type="checkbox" name="showGlow">
+            <span class="switch-track" aria-hidden="true"></span>
+          </span>
+        </label>
+        <button type="button" class="reset-theme" id="reset-theme">Use default theme</button>
+      </section>
+      <section class="settings-section">
+        <h3>Shortcuts</h3>
+        <ul class="hotkeys">
+          <li><span>Edit</span><kbd data-key="E">⌘E</kbd></li>
+          <li><span>Sections</span><kbd data-key="S">⌘S</kbd></li>
+          <li><span>Settings</span><kbd data-key="D">⌘D</kbd></li>
+          <li><span>Search</span><kbd data-key="F">⌘F</kbd></li>
+        </ul>
+      </section>
+      <p class="settings-foot">Saved on this device.</p>
+    </form>
+  </aside>
+  <div class="edit-popover" id="edit-popover" role="dialog" hidden>
+    <div class="edit-menu" id="edit-menu">
+      <button type="button" class="edit-menu-item" data-kind="bookmark">New bookmark</button>
+      <button type="button" class="edit-menu-item" data-kind="folder">New folder</button>
+    </div>
+    <form class="edit-form" id="edit-form" hidden>
+      <h2 id="edit-popover-title">Edit bookmark</h2>
+      <label class="edit-field">Name
+        <input name="title" type="text" autocomplete="off" spellcheck="false" autocapitalize="off">
+      </label>
+      <label class="edit-field" id="edit-url-field">Address
+        <input name="url" type="text" inputmode="url" autocomplete="off" spellcheck="false" autocapitalize="off"
+          placeholder="example.com">
+      </label>
+      <p class="edit-error" id="edit-error" hidden></p>
+      <div class="edit-form-actions">
+        <button type="button" class="edit-cancel" id="edit-cancel">Cancel</button>
+        <button type="submit" class="edit-save" id="edit-save">Save</button>
+      </div>
+    </form>
+  </div>
+  <div class="undo-stack" id="undo-stack"></div>
+  <nav class="section-rail" id="section-rail" aria-label="Sections">
+    <div class="section-rail-list" id="section-rail-list"></div>
+    <div class="section-new" id="section-new" hidden>New section</div>
+  </nav>
+  <main class="page">
+    <div class="favourites" id="favourites" hidden>
+      <ul class="favourites-list" id="favourites-list" aria-label="Favourites"></ul>
+    </div>
+    <div class="sections" id="sections">
+      <section class="panel" data-section-id="default">
+        <header class="header" data-section-id="default">
+          <div class="header-bar">
+            <h1>
+              <svg class="title-mark" viewBox="0 0 16 16" width="18" height="18" aria-hidden="true" focusable="false">
+                <path fill="currentColor"
+                  d="M3.6 1.5h8.8A1.1 1.1 0 0 1 13.5 2.6V14.5L8 11.2 2.5 14.5V2.6A1.1 1.1 0 0 1 3.6 1.5z" />
+              </svg>
+              <span class="section-title">Bookmarks</span>
+            </h1>
+            <div class="header-actions">
+              <button type="button" class="branch-toggle" data-action="expand" title="Expand all">
+                <svg viewBox="0 0 21 18" width="21" height="18" aria-hidden="true" focusable="false">
+                  <path d="M4.6 2.7 10.5 7.6 16.4 2.7M4.6 9.3 10.5 14.2 16.4 9.3" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="visually-hidden">Expand all</span>
+              </button>
+              <button type="button" class="graph-toggle" hidden aria-pressed="false" title="Show as graph">
+                <svg viewBox="0 0 21 18" width="21" height="18" aria-hidden="true" focusable="false">
+                  <rect x="1.15" y="6.7" width="4.6" height="4.6" rx="1.3" fill="currentColor" />
+                  <rect x="12.15" y="2.55" width="7.7" height="3.4" rx="1.2" fill="none" stroke="currentColor"
+                    stroke-width="1.35" />
+                  <rect x="12.15" y="12.05" width="7.7" height="3.4" rx="1.2" fill="none" stroke="currentColor"
+                    stroke-width="1.35" />
+                  <path d="M5.75 9H8.5M12.15 4.25H10.1Q8.5 4.25 8.5 5.6V12.4Q8.5 13.75 10.1 13.75H12.15" fill="none"
+                    stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="visually-hidden">Show as graph</span>
+              </button>
+            </div>
+          </div>
+          <p class="meta" role="status"></p>
+        </header>
+        <div class="tree-host" role="tree" aria-label="Bookmarks"></div>
+        <div class="graph-host" role="tree" aria-orientation="horizontal" aria-label="Bookmarks" hidden></div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
